@@ -1,6 +1,9 @@
 @extends('auth.layouts')
 
 @section('content')
+
+    @if (Auth::check() && Auth::user() -> level = 'admin')
+
     <form action="{{ route('buku.search') }}" method="GET" style="margin-top: 20px; margin-left: 20px;">
         @csrf
         <input type="text" name="kata" class="form-control" placeholder="Cari..."
@@ -24,7 +27,8 @@
         </script>
         <thead class="table-light">
             <tr>
-                <th>id</th>
+                <th>No</th>
+                <th>Foto</th>
                 <th>Judul Buku</th>
                 <th>Penerbit</th>
                 <th>Harga</th>
@@ -39,6 +43,7 @@
             @foreach($data_buku as $index => $Buku)
                 <tr>
                     <td>{{ $loop->iteration }}</td>
+                    <td><img src="{{ asset('uploads/'.$Buku -> foto) }} " style="width:100px; height:100px"></td>
                     <td>{{ $Buku->judul }}</td>
                     <td>{{ $Buku->penulis }}</td>
                     <td>Rp. {{ number_format($Buku->harga, 2, ',', '.') }}</td>
@@ -66,5 +71,7 @@
         <div class="d-flex justify-content-center mt-3 mb-3">
             <a href="{{ route('buku.create') }}" class="btn btn-primary">Tambah Buku</a>
         </div>
+    @endif
+
     @endif
 @endsection

@@ -8,7 +8,7 @@
         <div class="card">
             <div class="card-header">Register</div>
             <div class="card-body">
-                <form action="{{ route('store') }}" method="post">
+                <form action="{{ route('store') }}" method="post" enctype="multipart/form-data">
                     @csrf
 
                     <div class="mb-3 row">
@@ -17,6 +17,16 @@
                             <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name') }}">
                             @if ($errors->has('name'))
                                 <span class="text-danger">{{ $errors->first('name') }}</span>
+                            @endif
+                        </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                        <label for="foto" class="col-md-4 col-form-label text-md-end text-start">Foto</label>
+                        <div class="col-md-6">
+                            <input type="text" class="form-control @error('foto') is-invalid @enderror" id="foto" name="foto" value="{{ old('foto') }}">
+                            @if ($errors->has('foto'))
+                                <span class="text-danger">{{ $errors->first('foto') }}</span>
                             @endif
                         </div>
                     </div>

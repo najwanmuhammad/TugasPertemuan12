@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use App\Jobs\SendMailJob;
 use App\Mail\SendEmail;
 use App\http\conroller\sendEmailController;
@@ -34,18 +35,32 @@ class LoginRegisterController extends Controller
     $request->validate([
         'name' => 'required|string|max:250',
         'email' => 'required|email|unique:users|max:250',
-        'password' => 'required|confirmed|min:8'
+        'password' => 'required|confirmed|min:8',
+        'foto' => 'image|nullable|max:1999'
     ]);
+    if ($request -> hasFile('picture')) {
+        $filenameWithExt = $request->file('foto')->getClientOriginalName();
+        $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+        $extension = $request->file('foto')->getClientOriginalExtension();
+        $filenameSimpan = $filename . '_' . time() . '.' . $extension;
+        $path = $request->file('foto')->storeAs('public', $filenameSimpan);
+
+    } else {
+        // tidak ada file yg di upload
+    }
 
     // Membuat pengguna baru
     User::create([
+        'level' => 'admin',
         'name' => $request->name,
         'email' => $request->email,
-        'password' => Hash::make($request->password)
+        'password' => Hash::make($request->password),
+        'foto' => $filenameSimpan ?? null
     ]);
 
     // Persiapkan data untuk email
     $data = [
+        'level' => 'admin',
         'name' => $request->name,
         'email' => $request->email,
         'subject' => 'Registration Confirmation'

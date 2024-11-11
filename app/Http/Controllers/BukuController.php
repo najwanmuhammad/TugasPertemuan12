@@ -74,6 +74,13 @@ class BukuController extends Controller
         $buku -> penulis = $request -> penulis;
         $buku -> harga = $request -> harga;
         $buku -> tahun_terbit = $request -> tahun_terbit;
+        
+        if ($request->hasFile('foto')) {
+            $file = $request->file('foto');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('uploads'), $filename);
+            $buku->foto = $filename;
+        }
         $buku -> save();
 
         return redirect('/buku/index')-> with('successadd', 'Item added successfuly');

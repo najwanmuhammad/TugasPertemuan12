@@ -40,7 +40,7 @@ Route::controller(LoginRegisterController::class)->group(function() {
 
 
 
-   Route::middleware('auth')->group(function() {
+   Route::middleware(['auth', 'admin'])->group(function() {
     Route::controller(BukuController::class)->group(function() {
         Route::get('/buku/create', 'create')->name('buku.create');
         Route::post('/buku', 'store')->name('buku.store');
