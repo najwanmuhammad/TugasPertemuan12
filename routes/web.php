@@ -6,6 +6,8 @@ use App\Http\Controllers\SendEmailController;
 use App\Http\Controllers\Auth\LoginRegisterController;
 use App\Http\Controllers\BukuController;
 
+use App\Http\Controllers\GalleryController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -37,10 +39,12 @@ Route::controller(LoginRegisterController::class)->group(function() {
     Route::post('/logout', 'logout')->name('logout');
    });
 
+Route::resource('gallery', GalleryController::class);
 
 
 
-   Route::middleware(['auth', 'admin'])->group(function() {
+
+Route::middleware(['auth', 'admin'])->group(function() {
     Route::controller(BukuController::class)->group(function() {
         Route::get('/buku/create', 'create')->name('buku.create');
         Route::post('/buku', 'store')->name('buku.store');
